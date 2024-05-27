@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
 using temperature_analysis.Models;
+using temperature_analysis.Utils;
+using temperature_analysis.DAO;
+
 
 namespace temperature_analysis.Controllers
 {
@@ -16,8 +19,8 @@ namespace temperature_analysis.Controllers
         public IActionResult Login(PersonViewModel model)
         {
 
-            PersonsDAO DAO = new PersonsDAO();
-            EmployeesDAO employeesDAO = new EmployeesDAO();
+            PersonsDAO DAO = new();
+            EmployeesDAO employeesDAO = new();
 
             if (DAO.LoginExists(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash)))
             {
