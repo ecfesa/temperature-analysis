@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration.UserSecrets;
+using temperature_analysis.DAO;
 using temperature_analysis.Models;
 using temperature_analysis.Utils;
 using temperature_analysis.DAO;
@@ -18,18 +19,18 @@ namespace temperature_analysis.Controllers
 
         public IActionResult Login(PersonViewModel model)
         {
-
             PersonsDAO DAO = new();
             EmployeesDAO employeesDAO = new();
+
 
             if (DAO.LoginExists(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash)))
             {
                 HttpContext.Session.SetString("UserLogin", "true");
 
-                if ((model.Username == AdminLogin.admin_login && model.PasswordHash == AdminLogin.admin_password) || employeesDAO.IsAdmin(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash)))
-                    HttpContext.Session.SetString("IsAdmin", "true");
-                else if (employeesDAO.IsEmployee(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash)))
-                    HttpContext.Session.SetString("IsEmployee", "true");
+                //if ((model.Username == AdminLogin.admin_login && model.PasswordHash == AdminLogin.admin_password) || employeesDAO.IsAdmin(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash)))
+                //    HttpContext.Session.SetString("IsAdmin", "true");
+                //else if (employeesDAO.IsEmployee(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash)))
+                //    HttpContext.Session.SetString("IsEmployee", "true");
 
                 HttpContext.Session.SetInt32("ID", DAO.LoginExists(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash), true));
 
