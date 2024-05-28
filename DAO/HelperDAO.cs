@@ -17,14 +17,16 @@ namespace temperature_analysis.DAO
             string filePath = "connectionString.txt";
             string connectionString;
 
-            try
-            {
-                connectionString = File.ReadAllText(filePath);
-            }
-            catch (Exception ex)
-            {
-                throw new ApplicationException("Could not read the connection string from the file.", ex);
-            }
+            //try
+            //{
+            //    connectionString = File.ReadAllText(filePath);
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw new ApplicationException("Could not read the connection string from the file.", ex);
+            //}
+
+            connectionString = "Data Source=(localdb)\\mssqllocaldb; Database=pbldb; Trusted_Connection=True";  // testing purposes
 
             SqlConnection connection;
             try

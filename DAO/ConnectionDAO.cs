@@ -8,12 +8,12 @@ namespace temperature_analysis.DAO
     {
         public static SqlConnection GetConnection()
         {
-            string filePath = "connectionString.txt"; 
+            string filePath = "connectionString.txt";
             string strConn;
-            
+
             try
             {
-                strConn = File.ReadAllText(filePath); 
+                strConn = File.ReadAllText(filePath);
             }
             catch (Exception ex)
             {
