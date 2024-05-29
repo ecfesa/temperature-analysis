@@ -1,5 +1,3 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
 namespace temperature_analysis.Controllers
 {
     public static class HelperController
@@ -7,6 +5,14 @@ namespace temperature_analysis.Controllers
         public static bool LoginSessionVerification(ISession session)
         {
             if (session.GetString("UserLogin") == null)
+                return false;
+            else
+                return true;
+        }
+
+        public static bool AdminSessionVerification(ISession session)
+        {
+            if (session.GetString("IsAdmin") == null)
                 return false;
             else
                 return true;

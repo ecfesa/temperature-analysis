@@ -1,6 +1,5 @@
-﻿namespace temperature_analysis.Models
+namespace temperature_analysis.Models
 {
-    
     public class PersonViewModel : StandardViewModel
     {
 
@@ -12,5 +11,4 @@
         public string PhoneNumber { get; set; }
 
     }
-    
 }

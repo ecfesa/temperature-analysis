@@ -18,7 +18,7 @@ namespace temperature_analysis.Controllers
         {
             try
             {
-                return View();  
+                return View();
             }
             catch (Exception error)
             {
@@ -44,7 +44,7 @@ namespace temperature_analysis.Controllers
         {
             if (DAO == null)
                 throw new ArgumentNullException("DAO", "DAO was not defined the controller.");
-            
+
 
             try
             {

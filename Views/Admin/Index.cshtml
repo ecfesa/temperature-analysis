@@ -1,0 +1,178 @@
+﻿@model PersonsEmployeesViewModel
+@{
+    ViewData["Title"] = "Admin Home";
+}
+
+<div class="flex flex-col items-center">
+    <h2 class="text-4xl font-bold mb-6">Pessoas</h2>
+  
+    <div class="mb-4">
+        <input type="text" id="searchInput" placeholder="Buscar pelo nome..." onkeyup="searchPersons()" class="border border-gray-300 rounded w-full p-2">
+    </div>
+
+    <div class="overflow-x-auto w-full mb-10">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-3 px-6 text-left">Primeiro Nome</th>
+                    <th class="py-3 px-6 text-left">Último Nome</th>
+                    <th class="py-3 px-6 text-left">Email</th>
+                    <th class="py-3 px-6 text-left">N° Telefone</th>
+                    <th class="py-3 px-6 text-left">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light" id="personsTableBody">
+                @foreach (var person in Model.Persons)
+                {
+                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                        <td class="py-3 px-6">@person.FirstName</td>
+                        <td class="py-3 px-6">@person.LastName</td>
+                        <td class="py-3 px-6">@person.Email</td>
+                        <td class="py-3 px-6">@person.PhoneNumber</td>
+                        <td class="flex flex-row items-center space-x-1 py-3 px-3 text-left">
+                            <button class="bg-blue-500 text-white py-1 px-3 rounded mb-1 hover:bg-blue-700 transition" onclick="editPerson(@person.Id)">Editar</button>
+                            <br>
+                            <button class="bg-red-500 text-white py-1 px-3 rounded mb-1 hover:bg-red-700 transition" onclick="deletePerson(@person.Id)">Delete</button>
+                            <br>
+                            <button class="bg-green-500 text-white py-1 px-3 rounded hover:bg-green-700 transition" onclick="turnToEmployee(@person.Id)">Tornar funcionário</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <h2 class="text-4xl font-bold mb-6">Funcionários</h2>
+
+    <div class="overflow-x-auto w-full">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-3 px-6 text-left">ID</th>
+                    <th class="py-3 px-6 text-left">ID da Pessoa</th>
+                    <th class="py-3 px-6 text-left">Possui admin?</th>
+                    <th class="py-3 px-6 text-left">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light">
+                @foreach (var employee in Model.Employees)
+                {
+                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                        <td class="py-3 px-6">@employee.Id</td>
+                        <td class="employee-name" data-employee-id="@employee.Id"></td>
+                        <td class="py-3 px-6">
+                            <input type="checkbox" data-person-id="@employee.PersonID" data-employee-id="@employee.Id" onchange="updateAdminStatus(this)" @(employee.IsAdmin ? "checked" : "") class="align-middle" />
+                        </td>
+                        <td class="py-3 px-2 text-left">
+                            <button class="bg-red-500 text-white py-1 px-3 rounded hover:bg-red-700 transition" onclick="deleteEmployee(@employee.Id)">Remover privilégio</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    function deletePerson(id)
+    {
+        if (confirm('Confirma a deleção da Pessoa?'))
+            location.href = '/Admin/DeletePerson?id=' + id;
+    }
+
+    function deleteEmployee(id){
+        if (confirm('Confirma a deleção do funcionario?'))
+            location.href = '/Admin/DeleteEmployee?id=' + id;
+    }
+
+    function editPerson(id)
+    {
+        location.href = '/Admin/EditPerson?id=' + id;
+    }
+
+    function turnToEmployee(id)
+    {
+        location.href = '/Admin/TurnToEmployee?id=' + id;
+    }
+
+    function updateAdminStatus(checkbox) {
+        var employeeId = $(checkbox).data('employee-id');
+        var personId = $(checkbox).data('person-id');
+        var isAdmin = checkbox.checked;
+
+        $.ajax({
+            url: '/Admin/UpdateAdminStatus',
+            type: 'POST',
+            data: {
+                id: employeeId,
+                isAdmin: isAdmin,
+                PersonId: personId
+            },
+            success: function(response) {
+                // Handle success
+                console.log('Status updated successfully.');
+            },
+            error: function(xhr, status, error) {
+                // Handle error
+                console.error('Error updating status: ' + error);
+            }
+        });
+    }
+
+    function searchPersons() {
+        var searchQuery = document.getElementById('searchInput').value;
+        $.ajax({
+            url: '/Admin/SearchPersons',
+            type: 'GET',
+            data: { query: searchQuery },
+            success: function(data) {
+                var tbody = document.getElementById('personsTableBody');
+                tbody.innerHTML = '';
+                data.forEach(function(person) {
+                    var row = `
+                        <tr class="border-b border-gray-200 hover:bg-gray-100">
+                            <td class="py-3 px-6">${person.firstName}</td>
+                            <td class="py-3 px-6">${person.lastName}</td>
+                            <td class="py-3 px-6">${person.id}</td>
+                            <td class="py-3 px-6">${person.email}</td>
+                            <td class="py-3 px-6">${person.phoneNumber}</td>
+                            <td class="flex flex-row items-center space-x-2 py-3 px-3 text-left">
+                                <button class="bg-blue-500 text-white h-full py-1 px-3 rounded mb-1 hover:bg-blue-700 transition" onclick="editPerson(${person.id})">Editar</button>
+                                <button class="bg-red-500 text-white h-full py-1 px-3 rounded mb-1 hover:bg-red-700 transition" onclick="deletePerson(${person.id})">Delete</button>
+                                <button class="bg-green-500 text-white h-full py-1 px-3 rounded mb-1 hover:bg-green-700 transition" onclick="turnToEmployee(${person.id})">Tornar funcionário</button>
+                            </td>
+                        </tr>`;
+                    tbody.innerHTML += row;
+
+                    console.log(person);
+                });
+            },
+            error: function(error) {
+                console.error('Error fetching search results:', error);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        $('.employee-name').each(function () {
+            var employeeId = $(this).data('employee-id'); // Corrigido aqui
+            var employeeNameCell = $(this);
+            $.ajax({
+                url: '@Url.Action("GetEmployeeNameById", "Admin")',
+                type: 'GET',
+                data: { id: employeeId },
+                success: function (response) {
+                    if (response.success) {
+                        employeeNameCell.text(response.personName);
+                    } else {
+                        console.error('Error: ' + response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error fetching employee name: ' + error);
+                }
+            });
+        });
+    });
+
+</script>

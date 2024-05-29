@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration.UserSecrets;
+using temperature_analysis.DAO;
 using temperature_analysis.Models;
 using temperature_analysis.Utils;
-using temperature_analysis.DAO;
 
 
 namespace temperature_analysis.Controllers

@@ -1,5 +1,3 @@
-using System;
-using System.IO;
 using System.Data.SqlClient;
 
 namespace temperature_analysis.DAO
