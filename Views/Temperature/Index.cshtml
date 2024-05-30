@@ -17,20 +17,12 @@
     <script src="~/js/dashboard.js"></script>
     <script>
         var temperatureData = @Html.Raw(Json.Serialize(Model));
+        console.log(temperatureData);
 
         function loadChart() {
-
-            let filteredData = temperatureData.map(item => {
-                return {
-                    Timestamp: new Date(item.Timestamp),
-                    Temperature: item.Temperature
-                };
-            });
-
-            renderChart(filteredData);
+            renderChart(temperatureData);
         }
 
-        // Load chart on page load
         loadChart();
     </script>
 }
