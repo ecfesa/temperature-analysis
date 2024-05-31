@@ -6,7 +6,7 @@ namespace temperature_analysis.DAO
     public class TemperatureDAO
     {
         private static readonly HttpClient client = new HttpClient();
-        private const string _baseUri = "http://10.5.10.34";
+        private const string _baseUri = "http://104.41.57.13";
 
         public async Task<string> GetStatus(string device)
         {
@@ -31,7 +31,7 @@ namespace temperature_analysis.DAO
         public async Task<double> GetMinuteAverage(string entityName)
         {
             string timeFrom = GetLastMinute();
-            string url = $"{_baseUri}:8666/STH/v1/contextEntities/type/Lamp/id/{entityName}/attributes/luminosity?dateFrom={timeFrom}&lastN=100";
+            string url = $"{_baseUri}:8666/STH/v1/contextEntities/type/TemperatureSensor/id/{entityName}/attributes/temperature?dateFrom={timeFrom}&lastN=100";
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("fiware-service", "smart");
             client.DefaultRequestHeaders.Add("fiware-servicepath", "/");
@@ -41,14 +41,14 @@ namespace temperature_analysis.DAO
             {
                 string responseBody = await response.Content.ReadAsStringAsync();
                 var data = JsonDocument.Parse(responseBody).RootElement;
-                var luminosityValues = data
+                var temperatureValues = data
                     .GetProperty("contextResponses")[0]
                     .GetProperty("contextElement")
                     .GetProperty("attributes")[0]
                     .GetProperty("values");
 
                 List<double> values = new List<double>();
-                foreach (var value in luminosityValues.EnumerateArray())
+                foreach (var value in temperatureValues.EnumerateArray())
                 {
                     values.Add(value.GetProperty("attrValue").GetDouble());
                 }
@@ -84,9 +84,9 @@ namespace temperature_analysis.DAO
             await client.PatchAsync(url, content);
         }
 
-        public async Task CalculateState(double luminosity, string entityName)
+        public async Task CalculateState(double temperature, string entityName)
         {
-            if (luminosity > 50)
+            if (temperature > 50)
             {
                 await SendCommand(false, entityName);
             }
@@ -118,7 +118,7 @@ namespace temperature_analysis.DAO
 
         public async Task<List<JsonElement>> GetPastData(int lastN)
         {
-            string url = $"{_baseUri}:8666/STH/v1/contextEntities/type/Lamp/id/urn:ngsi-ld:Lamp:002/attributes/luminosity?lastN={lastN}";
+            string url = $"{_baseUri}:8666/STH/v1/contextEntities/type/TemperatureSensor/id/urn:ngsi-ld:TemperatureSensor:008/attributes/temperature?lastN={lastN}";
 
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("fiware-service", "smart");
@@ -130,19 +130,19 @@ namespace temperature_analysis.DAO
             {
                 string responseBody = await response.Content.ReadAsStringAsync();
                 var data = JsonDocument.Parse(responseBody).RootElement;
-                var luminosityData = data
+                var temperatureData = data
                     .GetProperty("contextResponses")[0]
                     .GetProperty("contextElement")
                     .GetProperty("attributes")[0]
                     .GetProperty("values");
 
-                var luminosityList = new List<JsonElement>();
-                foreach (var value in luminosityData.EnumerateArray())
+                var temperatureList = new List<JsonElement>();
+                foreach (var value in temperatureData.EnumerateArray())
                 {
-                    luminosityList.Add(value);
+                    temperatureList.Add(value);
                 }
 
-                return luminosityList;
+                return temperatureList;
             }
             else
             {
