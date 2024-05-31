@@ -6,7 +6,7 @@ namespace temperature_analysis.DAO
     public class TemperatureDAO
     {
         private static readonly HttpClient client = new HttpClient();
-        private const string _baseUri = "http://10.5.10.34";
+        private const string _baseUri = "http://104.41.57.13";
 
         public async Task<string> GetStatus(string device)
         {
@@ -31,7 +31,7 @@ namespace temperature_analysis.DAO
         public async Task<double> GetMinuteAverage(string entityName)
         {
             string timeFrom = GetLastMinute();
-            string url = $"{_baseUri}:8666/STH/v1/contextEntities/type/Temp/id/{entityName}/attributes/temperature?dateFrom={timeFrom}&lastN=100";
+            string url = $"{_baseUri}:8666/STH/v1/contextEntities/type/TemperatureSensor/id/{entityName}/attributes/temperature?dateFrom={timeFrom}&lastN=100";
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("fiware-service", "smart");
             client.DefaultRequestHeaders.Add("fiware-servicepath", "/");
@@ -118,7 +118,7 @@ namespace temperature_analysis.DAO
 
         public async Task<List<JsonElement>> GetPastData(int lastN)
         {
-            string url = $"{_baseUri}:8666/STH/v1/contextEntities/type/Temp/id/urn:ngsi-ld:Temp:008/attributes/temperature?lastN={lastN}";
+            string url = $"{_baseUri}:8666/STH/v1/contextEntities/type/TemperatureSensor/id/urn:ngsi-ld:TemperatureSensor:008/attributes/temperature?lastN={lastN}";
 
             client.DefaultRequestHeaders.Clear();
             client.DefaultRequestHeaders.Add("fiware-service", "smart");
