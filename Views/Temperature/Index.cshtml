@@ -1,7 +1,28 @@
-﻿
+﻿@model IEnumerable<temperature_analysis.Models.TemperatureViewModel>
 
+@{
+    ViewData["Title"] = "Temperature Dashboard";
+}
 
+<h1>Temperature Dashboard</h1>
 
+<div>
+    <canvas id="temperatureChart" width="400" height="200"></canvas>
+</div>
 
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/luxon"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
+    <script src="~/js/dashboard.js"></script>
+    <script>
+        var temperatureData = @Html.Raw(Json.Serialize(Model));
+        console.log(temperatureData);
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js" type="text/javascript"></script>
+        function loadChart() {
+            renderChart(temperatureData);
+        }
+
+        loadChart();
+    </script>
+}
