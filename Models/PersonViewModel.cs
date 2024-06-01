@@ -9,6 +9,9 @@ namespace temperature_analysis.Models
         public string Username { get; set; }
         public string PasswordHash { get; set; }
         public string PhoneNumber { get; set; }
+        public int ThemeId { get; set; }
 
+        public string ThemeDescription { get; set; }
+        public string ThemeHex {  get; set; }
     }
 }

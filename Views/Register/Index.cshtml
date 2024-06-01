@@ -55,6 +55,13 @@
                             required>
                         <span asp-validation-for="PasswordHash" class="text-danger"></span>
                     </div>
+
+                    <div>
+                        <label for="ThemeId" class="control-label">Tema</label>
+                        <select asp-for="ThemeId" asp-items="ViewBag.Themes" class="form-control"> </select>
+                        <span asp-validation-for="ThemeId" class="text-danger"></span>
+                    </div>
+
                     <button type="submit"
                         class="w-full text-white bg-blue-800 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-400 font-medium rounded-lg text-sm px-5 py-2.5 text-center ">Login</button>
                     <p class="text-sm font-light text-gray-500 text-center">

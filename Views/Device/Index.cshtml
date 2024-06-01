@@ -1,0 +1,70 @@
+﻿@model List<DeviceViewModel>
+@{
+    ViewData["Title"] = "Gerenciamento de Dispositivos";
+}
+
+<div class="flex flex-col items-center">
+    <h2 class="text-4xl font-bold mb-6">Dispositivos</h2>
+
+    <div class="overflow-x-auto w-full mb-10">
+        <table class="min-w-full bg-white border border-gray-300">
+            <thead>
+                <tr class="bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
+                    <th class="py-3 px-6 text-left">ID do Dispositivo</th>
+                    <th class="py-3 px-6 text-left">Serviço</th>
+                    <th class="py-3 px-6 text-left">Tipo da Entidade</th>
+                    <th class="py-3 px-6 text-left">Transporte</th>
+                    <th class="py-3 px-6 text-left">Ações</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 text-sm font-light" id="devicesTableBody">
+                @foreach (var device in Model)
+                {
+                    <tr class="border-b border-gray-200 hover:bg-gray-100">
+                        <td class="py-3 px-6">@device.DeviceId</td>
+                        <td class="py-3 px-6">@device.Service</td>
+                        <td class="py-3 px-6">@device.EntityType</td>
+                        <td class="py-3 px-6">@device.Transport</td>
+                        <td class="flex flex-row items-center space-x-1 py-3 px-3 text-left">
+                            <button class="bg-blue-500 text-white py-1 px-3 rounded mb-1 hover:bg-blue-700 transition" onclick="editDevice('@device.DeviceId')">Ver detalhes</button>
+                            <button class="bg-red-500 text-white py-1 px-3 rounded mb-1 hover:bg-red-700 transition" onclick="deleteDevice('@device.DeviceId')">Excluir</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Botão Adicionar dispositivo -->
+    <button class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-700 transition" onclick="addDevice()">Adicionar Dispositivo</button>
+</div>
+
+<script>
+    function editDevice(deviceId) {
+        // Navegar para a página de edição do dispositivo
+        location.href = '/Device/Details?deviceId=' + deviceId;
+    }
+
+    function deleteDevice(deviceId) {
+        if (confirm('Tem certeza de que deseja excluir este dispositivo?')) {
+            // Chamar a API de exclusão de dispositivo
+            $.ajax({
+                url: '/Device/Delete',
+                // type: 'POST',
+                data: { deviceId: deviceId },
+                success: function (response) {
+                    // Recarregar a página após a exclusão bem-sucedida
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error('Erro ao excluir o dispositivo: ' + error);
+                }
+            });
+        }
+    }
+
+    function addDevice() {
+        // Navegar para a página de adição de dispositivo
+        location.href = '/Device/Create';
+    }
+</script>

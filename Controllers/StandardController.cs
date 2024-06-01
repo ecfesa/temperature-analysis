@@ -98,8 +98,5 @@ namespace temperature_analysis.Controllers
                 return View("Error", new ErrorViewModel(error.ToString()));
             }
         }
-
-
-
     }
 }

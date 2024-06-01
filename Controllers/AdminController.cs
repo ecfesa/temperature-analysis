@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Data;
+using System.Reflection;
 using temperature_analysis.Controllers;
 using temperature_analysis.DAO;
 using temperature_analysis.Models;
@@ -18,7 +20,7 @@ namespace temperature_analysis.Controllers
 
         public override IActionResult Index()
         {
-
+            ViewBag.Theme = HttpContext.Session.GetString("Theme");
             ViewBag.IsAdmin = HelperController.AdminSessionVerification(HttpContext.Session);
 
             EmployeesDAO employeesDAO = new EmployeesDAO();
@@ -52,10 +54,11 @@ namespace temperature_analysis.Controllers
 
         public IActionResult EditPerson(int id)
         {
-
+            ViewBag.Themes = new ThemeDAO().GetAll().Select(t => new SelectListItem(t.Description, t.Id.ToString()));
+            ViewBag.Theme = HttpContext.Session.GetString("Theme");
             PersonsDAO DAO = new PersonsDAO();
-            return View("PersonEdit", DAO.Get(id));
 
+            return View("PersonEdit", DAO.Get(id));
         }
 
         public IActionResult SavePerson(PersonViewModel model)
@@ -64,6 +67,9 @@ namespace temperature_analysis.Controllers
 
             try
             {
+                if (HttpContext.Session.GetInt32("ID") == model.Id)
+                    HttpContext.Session.SetString("Theme", new ThemeDAO().Get(model.ThemeId).PrimaryHex);
+
                 model.PasswordHash = HashHelper.ComputeSha256Hash(model.PasswordHash);
                 DAO.Update(model);
             }

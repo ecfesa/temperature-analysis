@@ -47,6 +47,12 @@
             <span asp-validation-for="PhoneNumber" class="text-red-500 block mt-1"></span>
         </div>
 
+        <div>
+            <label for="ThemeId" class="control-label">Tema</label>
+            <select asp-for="ThemeId" asp-items="ViewBag.Themes" class="form-control"> </select>
+            <span asp-validation-for="ThemeId" class="text-danger"></span>
+        </div>
+
         <div class="flex justify-between mt-6">
             <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md shadow-lg hover:bg-blue-700 transition duration-300">Salvar</button>
             <a href="@Url.Action("Index", "Admin")" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-md shadow-lg hover:bg-gray-700 transition duration-300">Voltar para a Lista</a>

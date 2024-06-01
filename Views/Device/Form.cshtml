@@ -1,0 +1,62 @@
+﻿@model DeviceViewModel
+@{
+    ViewData["Title"] = string.IsNullOrEmpty(Model.DeviceId) ? "Adicionar Dispositivo" : "Editar Dispositivo";
+}
+
+<div class="flex flex-col items-center justify-center min-h-full p-4">
+    <h2 class="text-4xl font-bold mb-8">@ViewData["Title"]</h2>
+
+    <form asp-action="SaveDevice" method="post" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+        @Html.AntiForgeryToken()
+
+        <div class="mb-4">
+            <label for="deviceId" class="block text-gray-700 font-bold mb-2">ID do Dispositivo</label>
+            <input type="text" asp-for="DeviceId" class="form-control border border-gray-300 rounded w-full p-2" required />
+            <span asp-validation-for="DeviceId" class="text-red-500 block mt-1"></span>
+        </div>
+
+        <div class="mb-4">
+            <label for="service" class="block text-gray-700 font-bold mb-2">Serviço</label>
+            <input type="text" asp-for="Service" class="form-control border border-gray-300 rounded w-full p-2" required />
+            <span asp-validation-for="Service" class="text-red-500 block mt-1"></span>
+        </div>
+
+        <div class="mb-4">
+            <label for="servicePath" class="block text-gray-700 font-bold mb-2">Caminho do Serviço</label>
+            <input type="text" asp-for="ServicePath" class="form-control border border-gray-300 rounded w-full p-2" required />
+            <span asp-validation-for="ServicePath" class="text-red-500 block mt-1"></span>
+        </div>
+
+        <div class="mb-4">
+            <label for="entityName" class="block text-gray-700 font-bold mb-2">Nome da Entidade</label>
+            <input type="text" asp-for="EntityName" class="form-control border border-gray-300 rounded w-full p-2" required />
+            <span asp-validation-for="EntityName" class="text-red-500 block mt-1"></span>
+        </div>
+
+        <div class="mb-4">
+            <label for="entityType" class="block text-gray-700 font-bold mb-2">Tipo da Entidade</label>
+            <input type="text" asp-for="EntityType" class="form-control border border-gray-300 rounded w-full p-2" required />
+            <span asp-validation-for="EntityType" class="text-red-500 block mt-1"></span>
+        </div>
+
+        <div class="mb-4">
+            <label for="transport" class="block text-gray-700 font-bold mb-2">Transporte</label>
+            <input type="text" asp-for="Transport" class="form-control border border-gray-300 rounded w-full p-2" required />
+            <span asp-validation-for="Transport" class="text-red-500 block mt-1"></span>
+        </div>
+
+        <div class="mb-4">
+            <label for="protocol" class="block text-gray-700 font-bold mb-2">Protocolo</label>
+            <input type="text" asp-for="Protocol" class="form-control border border-gray-300 rounded w-full p-2" required />
+            <span asp-validation-for="Protocol" class="text-red-500 block mt-1"></span>
+        </div>
+
+        <div class="flex justify-between mt-6">
+            @if (string.IsNullOrEmpty(Model.DeviceId))
+            {
+                <button type="submit" class="bg-blue-500 text-white font-bold py-2 px-4 rounded-md shadow-lg hover:bg-blue-700 transition duration-300">Salvar</button>
+            }
+            <a href="@Url.Action("Index", "Device")" class="bg-gray-500 text-white font-bold py-2 px-4 rounded-md shadow-lg hover:bg-gray-700 transition duration-300">Voltar para a Lista</a>
+        </div>
+    </form>
+</div>

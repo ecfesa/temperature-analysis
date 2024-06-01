@@ -1,9 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using temperature_analysis.Models;
 using temperature_analysis.DAO;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace temperature_analysis.Controllers
 {
@@ -19,11 +16,11 @@ namespace temperature_analysis.Controllers
         [Route("temp")]
         public async Task<IActionResult> Get()
         {
-            var test = await _temperatureDAO.GetPastData(10);
+            var data = await _temperatureDAO.GetPastData(10);
 
             // Converting the JSON elements to the ViewModel
             var temperatureData = new List<TemperatureViewModel>();
-            foreach (var item in test)
+            foreach (var item in data)
             {
                 temperatureData.Add(new TemperatureViewModel
                 {
@@ -38,6 +35,10 @@ namespace temperature_analysis.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.UserLogin = HelperController.LoginSessionVerification(HttpContext.Session);
+            ViewBag.IsAdmin = HelperController.AdminSessionVerification(HttpContext.Session);
+            ViewBag.Theme = HttpContext.Session.GetString("Theme");
+
             var jsonData = await _temperatureDAO.GetPastData(100);
 
             var temperatureData = new List<TemperatureViewModel>();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using temperature_analysis.DAO;
 using temperature_analysis.Models;
 
@@ -10,6 +11,12 @@ namespace temperature_analysis.Controllers
         public IActionResult Error()
         {
             return View("Error!");
+        }
+
+        public override IActionResult Index()
+        {
+            ViewBag.Themes = new ThemeDAO().GetAll().Select(t => new SelectListItem(t.Description, t.Id.ToString()));
+            return View();
         }
 
         public override IActionResult Save(PersonViewModel model, string operation)

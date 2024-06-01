@@ -18,6 +18,7 @@
                     <th class="py-3 px-6 text-left">Último Nome</th>
                     <th class="py-3 px-6 text-left">Email</th>
                     <th class="py-3 px-6 text-left">N° Telefone</th>
+                    <th class="py-3 px-6 text-left">Tema</th>
                     <th class="py-3 px-6 text-left">Ações</th>
                 </tr>
             </thead>
@@ -29,6 +30,7 @@
                         <td class="py-3 px-6">@person.LastName</td>
                         <td class="py-3 px-6">@person.Email</td>
                         <td class="py-3 px-6">@person.PhoneNumber</td>
+                        <td class="py-3 px-6">@person.ThemeDescription</td>
                         <td class="flex flex-row items-center space-x-1 py-3 px-3 text-left">
                             <button class="bg-blue-500 text-white py-1 px-3 rounded mb-1 hover:bg-blue-700 transition" onclick="editPerson(@person.Id)">Editar</button>
                             <br>
