@@ -33,7 +33,7 @@ namespace temperature_analysis.Controllers
                 int id = DAO.LoginExists(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash), true);
                 string theme = DAO.Get(id).ThemeHex;
                   
-                HttpContext.Session.SetString("Theme", theme.ToString());
+                HttpContext.Session.SetString("Theme", theme);
                 HttpContext.Session.SetInt32("ID", id);
 
                 return RedirectToAction("index", "Home");

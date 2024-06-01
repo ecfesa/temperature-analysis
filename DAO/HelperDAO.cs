@@ -12,34 +12,32 @@ namespace temperature_analysis.DAO
         /// <exception cref="ApplicationException">
         /// Thrown when the connection string cannot be read from the file or the connection cannot be opened.
         /// </exception>
-        private static SqlConnection GetConnection()
+        public static SqlConnection GetConnection()
         {
             string filePath = "connectionString.txt";
-            string connectionString;
+            string strConn;
 
-            //try
-            //{
-            //    connectionString = File.ReadAllText(filePath);
-            //}
-            //catch (Exception ex)
-            //{
-            //    throw new ApplicationException("Could not read the connection string from the file.", ex);
-            //}
-
-            connectionString = "Data Source=(localdb)\\mssqllocaldb; Database=sqldb; Trusted_Connection=True";  // testing purposes
-
-            SqlConnection connection;
             try
             {
-                connection = new SqlConnection(connectionString);
-                connection.Open();
+                strConn = File.ReadAllText(filePath);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException("Could not read the connection string from the file.", ex);
+            }
+
+            SqlConnection conn;
+            try
+            {
+                conn = new SqlConnection(strConn);
+                conn.Open();
             }
             catch (SqlException ex)
             {
                 throw new ApplicationException("Could not open a connection to the database.", ex);
             }
 
-            return connection;
+            return conn;
         }
 
         /// <summary>

@@ -61,8 +61,8 @@ namespace temperature_analysis.DAO
             if (row.Table.Columns.Contains("ThemeDescription"))
                 person.ThemeDescription = row["ThemeDescription"].ToString();
 
-            if (row.Table.Columns.Contains("ThemeHex"))
-                person.ThemeHex = row["ThemeHex"].ToString();
+            if (row.Table.Columns.Contains("PrimaryHex"))
+                person.ThemeHex = row["PrimaryHex"].ToString();
 
             return person;
         }
