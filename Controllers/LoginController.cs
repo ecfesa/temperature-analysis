@@ -17,11 +17,11 @@ namespace temperature_analysis.Controllers
 
         public IActionResult Login(PersonViewModel model)
         {
-            PersonsDAO DAO = new();
+            PersonsDAO PersonsDAO = new();
             EmployeesDAO employeesDAO = new();
+            ThemeDAO themeDAO = new();
 
-
-            if (DAO.LoginExists(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash)))
+            if (PersonsDAO.LoginExists(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash)))
             {
                 HttpContext.Session.SetString("UserLogin", "true");
 
@@ -30,10 +30,11 @@ namespace temperature_analysis.Controllers
                 else if (employeesDAO.IsEmployee(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash)))
                     HttpContext.Session.SetString("IsEmployee", "true");
 
-                int id = DAO.LoginExists(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash), true);
-                string theme = DAO.Get(id).ThemeHex;
+                int id = PersonsDAO.LoginExists(model.Username, HashHelper.ComputeSha256Hash(model.PasswordHash), true);
+                var themeId = PersonsDAO.Get(id).ThemeId;
+                var theme = themeDAO.Get(themeId);
                   
-                HttpContext.Session.SetString("Theme", theme);
+                HttpContext.Session.SetString("Theme", theme.PrimaryHex);
                 HttpContext.Session.SetInt32("ID", id);
 
                 return RedirectToAction("index", "Home");

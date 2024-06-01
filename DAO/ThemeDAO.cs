@@ -27,5 +27,20 @@ namespace temperature_analysis.DAO
         {
             throw new NotImplementedException();
         }
+
+        public override ThemeViewModel? Get(int id)
+        {
+            var p = new SqlParameter[]{
+                new SqlParameter("ThemeId", id),
+            };
+
+            var table = HelperDAO.ExecuteProcedureSelect("spGet_" + TableName(), p);
+
+            if (table.Rows.Count != 0)
+                return MountModel(table.Rows[0]);
+            else
+                return null;
+        }
+
     }
 }
