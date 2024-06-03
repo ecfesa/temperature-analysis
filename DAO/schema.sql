@@ -15,6 +15,7 @@ CREATE TABLE Persons (
     PasswordHash VARCHAR(MAX) NOT NULL,
     PhoneNumber VARCHAR(20) NULL,
     ThemeId INT DEFAULT 1 NULL,
+    Img VARBINARY(MAX) NULL,
     FOREIGN KEY (ThemeId) REFERENCES Themes(Id)
 );
 

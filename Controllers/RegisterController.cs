@@ -16,7 +16,7 @@ namespace temperature_analysis.Controllers
         public override IActionResult Index()
         {
             ViewBag.Themes = new ThemeDAO().GetAll().Select(t => new SelectListItem(t.Description, t.Id.ToString()));
-            return View();
+            return View(new PersonViewModel());
         }
 
         public override IActionResult Save(PersonViewModel model, string operation)
@@ -27,9 +27,15 @@ namespace temperature_analysis.Controllers
 
             ValidateRegistry(model);
 
+            if (model.FormImg != null)
+                using (var ms = new MemoryStream())
+                {
+                    model.FormImg.CopyTo(ms);
+                    model.ByteArrImg = ms.ToArray();
+                }
+
             if (ModelState.IsValid == true)
             {
-
                 DAO.Insert(model);
                 return RedirectToAction("index", "Home");
             }

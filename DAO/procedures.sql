@@ -79,11 +79,12 @@ CREATE PROCEDURE spInsert_Persons
     @PasswordHash VARCHAR(MAX),
     @Email VARCHAR(100),
     @PhoneNumber VARCHAR(20),
-    @ThemeId INT
+    @ThemeId INT,
+	@Img VARBINARY(MAX)
 AS
 BEGIN
-    INSERT INTO Persons (FirstName, LastName, Email, Username, PasswordHash, PhoneNumber, ThemeId)
-    VALUES (@FirstName, @LastName, @Email, @Username, @PasswordHash, @PhoneNumber, @ThemeId);
+    INSERT INTO Persons (FirstName, LastName, Email, Username, PasswordHash, PhoneNumber, ThemeId, Img)
+    VALUES (@FirstName, @LastName, @Email, @Username, @PasswordHash, @PhoneNumber, @ThemeId, @Img);
 END;
 
 -- Stored procedure to update Employees
@@ -107,10 +108,11 @@ CREATE PROCEDURE spUpdate_Persons
     @PasswordHash VARCHAR(MAX),
     @Email VARCHAR(100),
     @PhoneNumber VARCHAR(20),
-    @ThemeId INT
+    @ThemeId INT,
+	@Img VARBINARY(MAX)
 AS
 BEGIN
     UPDATE Persons
-    SET FirstName = @FirstName, LastName = @LastName, Email = @Email, Username = @Username, PasswordHash = @PasswordHash, PhoneNumber = @PhoneNumber, ThemeId = @ThemeId
+    SET FirstName = @FirstName, LastName = @LastName, Email = @Email, Username = @Username, PasswordHash = @PasswordHash, PhoneNumber = @PhoneNumber, ThemeId = @ThemeId, Img = @Img
     WHERE PersonID = @PersonID;
 END;

@@ -10,7 +10,11 @@
                 <h1 class="text-xl font-bold leading-tight tracking-tight md:text-2xl border-b p-2">
                     Seja bem vindo!
                 </h1>
-                <form class="text-left space-y-4 md:space-y-6" asp-action="Save">
+                <form class="text-left space-y-4 md:space-y-6" enctype="multipart/form-data" asp-action="Save">
+                    <img width="100" id="imgPreview" src="data:image/jpeg;base64,@Model.Base64Img" class="">
+                    <span asp-validation-for="FormImg" class="text-danger"></span>
+                    <input name="FormImg" id="FormImg" type="file" onchange="renderImg()" class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none">
+
                     <div class="flex flex-row space-x-2 md:space-x-4">
                         <div>
                         <label for="firstname" class="block mb-2 text-sm font-medium">* Primeiro nome</label>
@@ -55,6 +59,7 @@
                             required>
                         <span asp-validation-for="PasswordHash" class="text-danger"></span>
                     </div>
+                                       
 
                     <div>
                         <label for="ThemeId" class="control-label">Tema</label>
@@ -74,3 +79,13 @@
     </div>
 
 </div>
+
+<script>
+    function renderImg() {
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("FormImg").files[0]);
+        oFReader.onload = function (oFREvent) {
+            document.getElementById("imgPreview").src = oFREvent.target.result;
+        };
+    }
+</script>

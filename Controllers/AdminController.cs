@@ -70,6 +70,13 @@ namespace temperature_analysis.Controllers
                 if (HttpContext.Session.GetInt32("ID") == model.Id)
                     HttpContext.Session.SetString("Theme", new ThemeDAO().Get(model.ThemeId).PrimaryHex);
 
+                if (model.FormImg != null)
+                    using (var ms = new MemoryStream())
+                    {
+                        model.FormImg.CopyTo(ms);
+                        model.ByteArrImg = ms.ToArray();
+                    }
+
                 model.PasswordHash = HashHelper.ComputeSha256Hash(model.PasswordHash);
                 DAO.Update(model);
             }

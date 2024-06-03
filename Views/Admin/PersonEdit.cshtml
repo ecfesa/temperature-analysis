@@ -6,10 +6,14 @@
 <div class="flex flex-col items-center justify-center min-h-full p-4">
     <h2 class="text-4xl font-bold mb-8">@(Model.Id == 0 ? "Create Person" : "Edit Person")</h2>
 
-    <form asp-action="SavePerson" method="post" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
+    <form enctype="multipart/form-data" asp-action="SavePerson" method="post" class="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg">
         @Html.AntiForgeryToken()
 
         <input type="hidden" asp-for="Id" />
+
+        <img width="100" id="imgPreview" src="data:image/jpeg;base64,@Model.Base64Img" class="">
+        <span asp-validation-for="FormImg" class="text-danger"></span>
+        <input name="FormImg" id="FormImg" type="file" onchange="renderImg()" class="block w-full mb-5 text-xs text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none">
 
         <div class="mb-4">
             <label for="FirstName" class="block text-gray-700 font-bold mb-2">Primeiro Nome</label>
@@ -59,3 +63,13 @@
         </div>
     </form>
 </div>
+
+<script>
+    function renderImg() {
+        var oFReader = new FileReader();
+        oFReader.readAsDataURL(document.getElementById("FormImg").files[0]);
+        oFReader.onload = function (oFREvent) {
+            document.getElementById("imgPreview").src = oFREvent.target.result;
+        };
+    }
+</script>

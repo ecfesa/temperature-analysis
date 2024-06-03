@@ -13,5 +13,9 @@ namespace temperature_analysis.Models
 
         public string ThemeDescription { get; set; }
         public string ThemeHex {  get; set; }
+
+        public IFormFile FormImg { get; set; }
+        public byte[] ByteArrImg { get; set; }
+        public string Base64Img => ByteArrImg != null ? Convert.ToBase64String(ByteArrImg) : string.Empty;
     }
 }

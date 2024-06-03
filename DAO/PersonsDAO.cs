@@ -14,7 +14,7 @@ namespace temperature_analysis.DAO
 
         protected override SqlParameter[] CreateParameters(PersonViewModel model)
         {
-            SqlParameter[] parameters = new SqlParameter[7];
+            SqlParameter[] parameters = new SqlParameter[8];
             parameters[0] = new SqlParameter("@FirstName", model.FirstName          ?? (object) DBNull.Value);
             parameters[1] = new SqlParameter("@LastName", model.LastName            ?? (object) DBNull.Value);
             parameters[2] = new SqlParameter("@Email", model.Email                  ?? (object) DBNull.Value);
@@ -22,20 +22,22 @@ namespace temperature_analysis.DAO
             parameters[4] = new SqlParameter("@PasswordHash", model.PasswordHash    ?? (object) DBNull.Value);
             parameters[5] = new SqlParameter("@PhoneNumber", model.PhoneNumber      ?? (object) DBNull.Value);
             parameters[6] = new SqlParameter("@ThemeId", model.ThemeId.ToString()   ?? (object) DBNull.Value);
+            parameters[7] = new SqlParameter("@Img", model.ByteArrImg               ?? (object) DBNull.Value);
             return parameters;
         }
 
         public SqlParameter[] CreateParametersForUpdate(PersonViewModel model)
         {
-            SqlParameter[] parameters = new SqlParameter[8];
+            SqlParameter[] parameters = new SqlParameter[9];
             parameters[0] = new SqlParameter("@PersonID", model.Id);
             parameters[1] = new SqlParameter("@FirstName", model.FirstName);
             parameters[2] = new SqlParameter("@LastName", model.LastName);
             parameters[3] = new SqlParameter("@Email", model.Email);
             parameters[4] = new SqlParameter("@Username", model.Username);
             parameters[5] = new SqlParameter("@PasswordHash", model.PasswordHash);
-            parameters[6] = new SqlParameter("@PhoneNumber", model.PhoneNumber ?? (object)DBNull.Value);
+            parameters[6] = new SqlParameter("@PhoneNumber", model.PhoneNumber      ?? (object)DBNull.Value);
             parameters[7] = new SqlParameter("@ThemeId", model.ThemeId.ToString()   ?? (object) DBNull.Value);
+            parameters[8] = new SqlParameter("@Img", model.ByteArrImg               ?? (object) DBNull.Value);
             return parameters;
         }
 
@@ -57,6 +59,8 @@ namespace temperature_analysis.DAO
             person.PhoneNumber = row["PhoneNumber"] != DBNull.Value ? row["PhoneNumber"].ToString() : null;
             person.ThemeId = Convert.ToInt32(row["ThemeId"]);
 
+            if (row["Img"] != DBNull.Value)
+                person.ByteArrImg = row["Img"] as byte[];
 
             if (row.Table.Columns.Contains("ThemeDescription"))
                 person.ThemeDescription = row["ThemeDescription"].ToString();
