@@ -1,112 +1,119 @@
-let pointsBuffer = [];
-let initialLoad = true;
+// Register data labels chartjs plugin and zoom plugin
+Chart.register(ChartDataLabels);
+
+// Global array to store the latest data points fetched from the API
+let apiData = [];
 
 // Function to initialize the chart
 function initializeChart() {
-    window.chart = new ApexCharts(document.querySelector("#temperatureChart"), {
-        chart: {
-            id: 'realtime',
-            type: 'line',
-            height: 350,
-            animations: {
-                enabled: true,
-                easing: 'linear',
-                dynamicAnimation: {
-                    speed: 1000 // Smooth animations over 1 second
+    const ctx = document.getElementById('temperatureChart');
+    window.chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            datasets: [{
+                label: 'Temperature',
+                data: [], // Initial empty dataset
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 3,
+                fill: false,
+                cubicInterpolationMode: 'monotone',
+                pointRadius: 0
+            }]
+        },
+        options: {
+            animation: false,
+            scales: {
+                x: {
+                    type: 'realtime',
+                    realtime: {
+                        duration: 20000, // Display data for the last 20000 milliseconds
+                        refresh: 1000,   // Refresh interval in milliseconds
+                        delay: 3000,     // 3 seconds delay for smoother transitions
+                        onRefresh: (chart) => {
+                            // No additional processing in onRefresh
+                            // The data will already be added in `fetchTemperatureData`
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                },
+                y: {
+                    min: 20, // Minimum y value for the temperature
+                    max: 80, // Maximum y value for the temperature
+                    title: {
+                        display: true,
+                        text: 'Temperature (°C)'
+                    }
                 }
             },
-            toolbar: {
-                show: true,
-                tools: {
-                    download: true,
-                    selection: true,
-                    zoom: true,
-                    zoomin: true,
-                    zoomout: true,
-                    pan: true,
-                    reset: true
+            plugins: {
+                datalabels: {
+                    // Assume x axis has the realtime scale
+                    backgroundColor: context => context.dataset.borderColor,
+                    padding: 4,
+                    borderRadius: 4,
+                    clip: true,       // true is recommended to keep labels from running off the chart area
+                    color: 'white',
+                    font: {
+                        weight: 'bold'
+                    },
+                    formatter: value => `${value.y.toFixed(1)}°C` // Use template literal
                 },
-                autoSelected: 'zoom'
-            },
-            zoom: {
-                enabled: true,
-                type: 'x',
-                autoScaleYaxis: true
+                zoom: {
+                    limits: {
+                        x: {  
+                            minDelay: 0,         // Set minimum delay limit
+                            maxDelay: 20000,     // Set maximum delay limit to match duration
+                            minDuration: 1000,   // Set minimum duration to 1 second
+                            maxDuration: 60000   // Set maximum duration to 60 seconds
+                        }
+                    },
+                    pan: {
+                        enabled: true, // Enable panning
+                        mode: 'x'      // Allow panning in the x direction
+                    },
+                    zoom: {
+                        pinch: {
+                            enabled: true // Enable pinch zooming
+                        },
+                        wheel: {
+                            enabled: true // Enable wheel zooming
+                        },
+                        mode: 'x' // Allow zooming in the x direction
+                    }
+                }
             }
-        },
-        series: [{
-            name: 'Temperature',
-            data: pointsBuffer // Initial empty dataset
-        }],
-        xaxis: {
-            type: 'datetime',
-            range: 120000 // Display data for the last 120000 milliseconds
-        },
-        yaxis: {
-            min: 20, 
-            max: 80, 
-            title: {
-                text: 'Temperature (°C)'
-            }
-        },
-        dataLabels: {
-            enabled: false
-        },
-        stroke: {
-            curve: 'smooth'
-        },
-        markers: {
-            size: 0
-        },
-        legend: {
-            show: false
-        },
-        tooltip: {
-            x: {
-                format: 'HH:mm:ss'
-            }
-        },
+        }
     });
-
-    window.chart.render();
 }
 
-// Function to add new data to the points buffer and update the chart data array
+// Function to add new data to the global array and update the chart
 function addData(newData) {
-    const existingTimestamps = pointsBuffer.map(item => item[0]);
+    const existingTimestamps = new Set(window.chart.data.datasets[0].data.map(item => item.x.getTime()));
 
     newData.forEach(item => {
         const timestamp = new Date(item.timestamp).getTime();
-        const isClose = existingTimestamps.some(existingTimestamp => {
-            return Math.abs(existingTimestamp - timestamp) <= 100; // Check if within 100ms
-        });
-
-        if (!isClose) {
-            const newDataPoint = [timestamp, item.temperature];
-            pointsBuffer.push(newDataPoint);
+        if (!existingTimestamps.has(timestamp)) {
+            const newDataPoint = {
+                x: new Date(item.timestamp),
+                y: item.temperature
+            };
+            window.chart.data.datasets[0].data.push(newDataPoint);
         }
     });
 
-    // Ensure pointsBuffer does not grow indefinitely
-    const maxDuration = 120000; // 2 minutes
-    const currentTime = new Date().getTime();
-    pointsBuffer = pointsBuffer.filter(point => {
-        return currentTime - point[0] <= maxDuration;
-    });
-
-    // Update the chart with the new pointsBuffer
-    window.chart.updateSeries([{
-        data: pointsBuffer
-    }]);
+    window.chart.update();
 }
 
 // Function to fetch temperature data using AJAX
-function fetchTemperatureData(pointsCount) {
+function fetchTemperatureData() {
     $.ajax({
-        url: `/temp?n=${pointsCount}`,
+        url: '/temp',
         method: 'GET',
         success: (data) => {
-            addData(data);
+            addData(data); // Directly call addData to process and add
         },
         error: (error) => {
             console.error('Error fetching temperature data:', error);
@@ -116,13 +123,7 @@ function fetchTemperatureData(pointsCount) {
 
 // Initial chart load
 initializeChart();
-fetchTemperatureData(200); // Fetch 200 points on initial load
+fetchTemperatureData();
 
 // Set interval to fetch new data every 1000 milliseconds
-setInterval(() => {
-    if (initialLoad) {
-        initialLoad = false;
-    } else {
-        fetchTemperatureData(5); // Fetch 5 points on subsequent loads
-    }
-}, 1000);
+setInterval(fetchTemperatureData, 1000);
