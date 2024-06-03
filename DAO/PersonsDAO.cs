@@ -2,6 +2,7 @@
 using System.Data;
 using temperature_analysis.Models;
 using System;
+using System.Data.SqlTypes;
 
 namespace temperature_analysis.DAO
 {
@@ -35,9 +36,9 @@ namespace temperature_analysis.DAO
             parameters[3] = new SqlParameter("@Email", model.Email);
             parameters[4] = new SqlParameter("@Username", model.Username);
             parameters[5] = new SqlParameter("@PasswordHash", model.PasswordHash);
-            parameters[6] = new SqlParameter("@PhoneNumber", model.PhoneNumber      ?? (object)DBNull.Value);
+            parameters[6] = new SqlParameter("@PhoneNumber", model.PhoneNumber      ?? (object) DBNull.Value);
             parameters[7] = new SqlParameter("@ThemeId", model.ThemeId.ToString()   ?? (object) DBNull.Value);
-            parameters[8] = new SqlParameter("@Img", model.ByteArrImg               ?? (object) DBNull.Value);
+            parameters[8] = new SqlParameter("@Img", model.ByteArrImg               ?? (object) SqlBinary.Null);
             return parameters;
         }
 
