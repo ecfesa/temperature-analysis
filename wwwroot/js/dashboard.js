@@ -1,4 +1,4 @@
-// Register data labels chartjs plugin
+// Register data labels chartjs plugin and zoom plugin
 Chart.register(ChartDataLabels);
 
 // Global array to store the latest data points fetched from the API
@@ -17,7 +17,7 @@ function initializeChart() {
                 borderWidth: 3,
                 fill: false,
                 cubicInterpolationMode: 'monotone',
-                pointRadius: 0 // Make individual dots invisible
+                pointRadius: 0
             }]
         },
         options: {
@@ -54,12 +54,35 @@ function initializeChart() {
                     backgroundColor: context => context.dataset.borderColor,
                     padding: 4,
                     borderRadius: 4,
-                    clip: true,       // true is recommended to keep labels running off the chart area
+                    clip: true,       // true is recommended to keep labels from running off the chart area
                     color: 'white',
                     font: {
                         weight: 'bold'
                     },
-                    formatter: value => value.y + '°C'
+                    formatter: value => `${value.y.toFixed(1)}°C` // Use template literal
+                },
+                zoom: {
+                    limits: {
+                        x: {  
+                            minDelay: 0,         // Set minimum delay limit
+                            maxDelay: 20000,     // Set maximum delay limit to match duration
+                            minDuration: 1000,   // Set minimum duration to 1 second
+                            maxDuration: 60000   // Set maximum duration to 60 seconds
+                        }
+                    },
+                    pan: {
+                        enabled: true, // Enable panning
+                        mode: 'x'      // Allow panning in the x direction
+                    },
+                    zoom: {
+                        pinch: {
+                            enabled: true // Enable pinch zooming
+                        },
+                        wheel: {
+                            enabled: true // Enable wheel zooming
+                        },
+                        mode: 'x' // Allow zooming in the x direction
+                    }
                 }
             }
         }
