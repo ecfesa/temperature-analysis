@@ -1,5 +1,46 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+    ViewData["Title"] = "Controle e Automação";
 }
+
+<div class="flex flex-col items-center justify-center">
+    <div class="pt-4 w-11/12 md:w-5/6 lg:w-3/4">
+        <h1 class="text-3xl font-bold mb-6 text-center">Análise do Sistema - Controle e Automação</h1>
+
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Modelo Teórico do Sistema Térmico</h2>
+            <p class="text-gray-700 mb-6">
+                O sistema térmico foi modelado utilizando equações diferenciais lineares invariantes no tempo (LIT). A função de transferência obtida para a malha aberta é:
+            </p>
+            <div class="bg-gray-200 px-8 p-4 rounded-lg text-sm">
+                G(s) = 0,2656 / (350s + 1)
+            </div>
+            <p class="text-gray-700 mt-6 mr-4">
+                Este modelo teórico permite entender como o sistema térmico responde às variações de entrada de calor ao longo do tempo.
+            </p>
+        </section>
+
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Resultados da Simulação</h2>
+            <h3 class="text-xl font-semibold mb-4 text-gray-700">Malha Aberta</h3>
+            <p class="text-gray-700 mb-6">
+                Na malha aberta, o sistema térmico apresentou uma resposta lenta e com grandes oscilações. Essas características foram previstas pela função de transferência.
+            </p>
+            <h3 class="text-xl font-semibold mb-4 text-gray-700">Malha Fechada</h3>
+            <p class="text-gray-700 mb-6">
+                Na malha fechada, a inclusão de um controlador ajustou o sistema para uma resposta mais estável e rápida, demonstrando eficácia no controle e na redução das oscilações.
+            </p>
+        </section>
+
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Monitoramento IoT</h2>
+            <h3 class="text-xl font-semibold mb-4 text-gray-700">Cooler Ajustado a 25%</h3>
+            <p class="text-gray-700 mb-6">
+                Ao ajustar o cooler para 25%, observou-se uma estabilização lenta com grandes oscilações iniciais, estabilizando em menos de 1000 segundos.
+            </p>
+            <h3 class="text-xl font-semibold mb-4 text-gray-700">Cooler Ajustado a 50% e KP=5</h3>
+            <p class="text-gray-700 mb-6">
+                Com o cooler ajustado a 50% e KP=5, o sistema apresentou uma melhora significativa na resposta, com menor tempo de estabilização e menor erro estacionário teórico de aproximadamente 2.64ºC.
+            </p>
+        </section>
+    </div>
+</div>

@@ -2,7 +2,7 @@
 
 namespace temperature_analysis.Controllers
 {
-    public class EmbarcadosController : Controller
+    public class TransporteController : Controller
     {
         public IActionResult Index()
         {

@@ -11,7 +11,7 @@ function initializeChart() {
         type: 'line',
         data: {
             datasets: [{
-                label: 'Temperature',
+                label: 'Temperatura',
                 data: [], // Initial empty dataset
                 borderColor: 'rgba(75, 192, 192, 1)',
                 borderWidth: 3,
@@ -36,7 +36,7 @@ function initializeChart() {
                     },
                     title: {
                         display: true,
-                        text: 'Time'
+                        text: 'Tempo'
                     }
                 },
                 y: {
@@ -44,7 +44,7 @@ function initializeChart() {
                     max: 80, // Maximum y value for the temperature
                     title: {
                         display: true,
-                        text: 'Temperature (°C)'
+                        text: 'Temperatura (°C)'
                     }
                 }
             },

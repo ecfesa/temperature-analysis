@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Fenômenos de Transporte";
+}
+
+<div class="flex flex-col items-center justify-center">
+    <div class="pt-4 w-11/12 md:w-5/6 lg:w-3/4">
+        <h1 class="text-3xl font-bold mb-6 text-center">Análise do Sistema - Fenômenos de Transporte</h1>
+
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Equipamentos Utilizados</h2>
+            <p class="text-gray-700 mb-6">
+                Para a análise dos dados e realização dos cálculos, um kit foi utilizado no projeto composto por um cooler e uma estrutura de alumínio revestidos por uma caixa de acrílico. A fonte de alimentação proporciona energia para o funcionamento adequado do kit. As imagens dos equipamentos utilizados podem ser vistas abaixo.
+            </p>
+            <div class="flex justify-center mb-6">
+                <img src="figura1.png" alt="Figura 1" class="w-1/2 rounded-lg shadow-lg mr-4">
+                <img src="figura2.png" alt="Figura 2" class="w-1/2 rounded-lg shadow-lg">
+            </div>
+        </section>
+
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Resultados da Simulação</h2>
+            <h3 class="text-xl font-semibold mb-4 text-gray-700">Malha Aberta</h3>
+            <p class="text-gray-700 mb-6">
+                O sistema foi configurado com cooler ajustado a 25%. A resposta foi lenta, com grandes oscilações iniciais, estabilizando em cerca de 33°C após aproximadamente 27 minutos.
+            </p>
+            <div class="flex justify-center mb-6">
+                <img src="malhaAberta.png" alt="Figura 3" class="w-1/2 rounded-lg shadow-lg">
+            </div>
+            <h3 class="text-xl font-semibold mb-4 text-gray-700">Malha Fechada</h3>
+            <p class="text-gray-700 mb-6">
+                Ao ajustar o cooler para 50% e kp=5, a simulação mostrou uma estabilização rápida em menos de 1000 segundos e a temperatura estabilizada em 19°C, mostrando uma melhora significativa.
+            </p>
+            <div class="flex justify-center mb-6">
+                <img src="melhoraSignificativa.png" alt="Figura 4" class="w-1/2 rounded-lg shadow-lg">
+            </div>
+        </section>
+
+        <section class="mb-10">
+            <h2 class="text-2xl font-semibold mb-4 text-center">Aplicações e Melhoria do Sistema</h2>
+            <p class="text-gray-700 mb-6">
+                Este tipo de sistema pode ser aplicado em diversas áreas, como controle de temperatura em processos industriais, laboratórios que necessitam de temperaturas constantes e sistemas de climatização. Algumas sugestões para melhorias incluem aumento da eficiência do cooler, melhor controle do set point e aprimoramento do isolamento térmico.
+            </p>
+        </section>
+    </div>
+</div>
