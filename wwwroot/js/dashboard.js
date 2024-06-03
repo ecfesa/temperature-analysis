@@ -1,3 +1,6 @@
+// Register data labels chartjs plugin and zoom plugin
+Chart.register(ChartDataLabels);
+
 // Global array to store the latest data points fetched from the API
 let apiData = [];
 
@@ -14,7 +17,7 @@ function initializeChart() {
                 borderWidth: 3,
                 fill: false,
                 cubicInterpolationMode: 'monotone',
-                pointRadius: 0 // Make individual dots invisible
+                pointRadius: 0
             }]
         },
         options: {
@@ -25,10 +28,10 @@ function initializeChart() {
                     realtime: {
                         duration: 20000, // Display data for the last 20000 milliseconds
                         refresh: 1000,   // Refresh interval in milliseconds
-                        delay: 3000,     // Increase delay to 2000 milliseconds (2 seconds)
+                        delay: 3000,     // 3 seconds delay for smoother transitions
                         onRefresh: (chart) => {
                             // No additional processing in onRefresh
-                            // The data will already be interpolated and added in `fetchTemperatureData`
+                            // The data will already be added in `fetchTemperatureData`
                         }
                     },
                     title: {
@@ -44,6 +47,43 @@ function initializeChart() {
                         text: 'Temperature (°C)'
                     }
                 }
+            },
+            plugins: {
+                datalabels: {
+                    // Assume x axis has the realtime scale
+                    backgroundColor: context => context.dataset.borderColor,
+                    padding: 4,
+                    borderRadius: 4,
+                    clip: true,       // true is recommended to keep labels from running off the chart area
+                    color: 'white',
+                    font: {
+                        weight: 'bold'
+                    },
+                    formatter: value => `${value.y.toFixed(1)}°C` // Use template literal
+                },
+                zoom: {
+                    limits: {
+                        x: {  
+                            minDelay: 0,         // Set minimum delay limit
+                            maxDelay: 20000,     // Set maximum delay limit to match duration
+                            minDuration: 1000,   // Set minimum duration to 1 second
+                            maxDuration: 60000   // Set maximum duration to 60 seconds
+                        }
+                    },
+                    pan: {
+                        enabled: true, // Enable panning
+                        mode: 'x'      // Allow panning in the x direction
+                    },
+                    zoom: {
+                        pinch: {
+                            enabled: true // Enable pinch zooming
+                        },
+                        wheel: {
+                            enabled: true // Enable wheel zooming
+                        },
+                        mode: 'x' // Allow zooming in the x direction
+                    }
+                }
             }
         }
     });
@@ -52,12 +92,7 @@ function initializeChart() {
 // Function to add new data to the global array and update the chart
 function addData(newData) {
     const existingTimestamps = new Set(window.chart.data.datasets[0].data.map(item => item.x.getTime()));
-    var lastPoint = window.chart.data.datasets[0].data.length > 0 
-                      ? window.chart.data.datasets[0].data[window.chart.data.datasets[0].data.length - 1] 
-                      : null;
 
-    // Process and interpolate new data points
-    const interpolatedPoints = [];
     newData.forEach(item => {
         const timestamp = new Date(item.timestamp).getTime();
         if (!existingTimestamps.has(timestamp)) {
@@ -65,54 +100,11 @@ function addData(newData) {
                 x: new Date(item.timestamp),
                 y: item.temperature
             };
-            console.log("New point: ", newDataPoint)
-            interpolatedPoints.push(...interpolatePoints(lastPoint, [newDataPoint]));
-            lastPoint = newDataPoint;
-            existingTimestamps.add(timestamp);
+            window.chart.data.datasets[0].data.push(newDataPoint);
         }
     });
 
-    // Add the interpolated points directly to the chart data
-    window.chart.data.datasets[0].data.push(...interpolatedPoints);
     window.chart.update();
-
-}
-
-// Function to interpolate data points for smooth transition
-function interpolatePoints(lastPoint, newData) {
-    const interpolationQuantity = 5
-    const interpolatedPoints = [];
-    if (lastPoint) {
-        // Interpolate between the last point from existing data and the first new data point
-        const firstNew = newData[0];
-        const delta = (firstNew.x - lastPoint.x) / interpolationQuantity;
-
-        for (let i = 1; i < interpolationQuantity; i++) {
-            interpolatedPoints.push({
-                x: new Date(lastPoint.x.getTime() + i * delta),
-                y: lastPoint.y + i * (firstNew.y - lastPoint.y) / interpolationQuantity
-            });
-        }
-    }
-
-    // Interpolate between successive new data points
-    for (let i = 0; i < newData.length - 1; i++) {
-        const startPoint = newData[i];
-        const endPoint = newData[i + 1];
-        const delta = (endPoint.x - startPoint.x) / interpolationQuantity;
-
-        for (let j = 1; j < interpolationQuantity; j++) {
-            interpolatedPoints.push({
-                x: new Date(startPoint.x.getTime() + j * delta),
-                y: startPoint.y + j * (endPoint.y - startPoint.y) / interpolationQuantity
-            });
-        }
-    }
-
-    // Add the new data points themselves at the end
-    interpolatedPoints.push(...newData);
-    
-    return interpolatedPoints;
 }
 
 // Function to fetch temperature data using AJAX
@@ -121,7 +113,7 @@ function fetchTemperatureData() {
         url: '/temp',
         method: 'GET',
         success: (data) => {
-            addData(data); // Directly call addData to process and interpolate
+            addData(data); // Directly call addData to process and add
         },
         error: (error) => {
             console.error('Error fetching temperature data:', error);
