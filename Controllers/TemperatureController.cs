@@ -14,9 +14,9 @@ namespace temperature_analysis.Controllers
         }
 
         [Route("temp")]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(int n = 10) // Optional parameter `n` with a default value of 10
         {
-            var data = await _temperatureDAO.GetPastData(10);
+            var data = await _temperatureDAO.GetPastData(n);
 
             // Converting the JSON elements to the ViewModel
             var temperatureData = new List<TemperatureViewModel>();
