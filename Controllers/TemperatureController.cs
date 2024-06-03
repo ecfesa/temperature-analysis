@@ -39,7 +39,7 @@ namespace temperature_analysis.Controllers
             ViewBag.IsAdmin = HelperController.AdminSessionVerification(HttpContext.Session);
             ViewBag.Theme = HttpContext.Session.GetString("Theme");
 
-            var jsonData = await _temperatureDAO.GetPastData(100);
+            var jsonData = await _temperatureDAO.GetPastData(10);
 
             var temperatureData = new List<TemperatureViewModel>();
             foreach (var item in jsonData)

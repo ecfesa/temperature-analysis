@@ -18,7 +18,6 @@ namespace temperature_analysis.DAO
 
             HttpResponseMessage response = await client.GetAsync(url);
             string responseBody = await response.Content.ReadAsStringAsync();
-            Console.WriteLine(responseBody);
             return responseBody;
         }
 
