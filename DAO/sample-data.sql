@@ -1,9 +1,9 @@
 -- Insert sample data into Persons and Employees
 INSERT INTO Themes (Description, PrimaryHex)
 VALUES
-('Default Theme', '#000000'),
-('Blue Theme', '#0000FF'),
-('Green Theme', '#00FF00');
+('Blue Theme', 'bg-blue-800'),
+('Red Theme', 'bg-red-800'),
+('Green Theme', 'bg-green-800');
 
 INSERT INTO Persons (FirstName, LastName, Email, Username, PasswordHash, PhoneNumber, ThemeId)
 VALUES

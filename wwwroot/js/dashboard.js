@@ -59,7 +59,7 @@ function initializeChart() {
                     font: {
                         weight: 'bold'
                     },
-                    formatter: value => `${value.y.toFixed(1)}°C` // Use template literal
+                    formatter: value => `${value.y.toFixed(1)}` // Use template literal
                 },
                 zoom: {
                     limits: {

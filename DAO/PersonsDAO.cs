@@ -23,7 +23,7 @@ namespace temperature_analysis.DAO
             parameters[4] = new SqlParameter("@PasswordHash", model.PasswordHash    ?? (object) DBNull.Value);
             parameters[5] = new SqlParameter("@PhoneNumber", model.PhoneNumber      ?? (object) DBNull.Value);
             parameters[6] = new SqlParameter("@ThemeId", model.ThemeId.ToString()   ?? (object) DBNull.Value);
-            parameters[7] = new SqlParameter("@Img", model.ByteArrImg               ?? (object) DBNull.Value);
+            parameters[7] = new SqlParameter("@Img", model.ByteArrImg               ?? (object)SqlBinary.Null);
             return parameters;
         }
 
