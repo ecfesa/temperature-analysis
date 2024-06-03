@@ -19,13 +19,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <header class="text-white @(ViewBag.UserLogin == true ? ViewBag.Theme : "bg-stone-800") flex flex-row justify-between py-6 m-2 px-4 rounded-xl drop-shadow-xl">
-        <h1 class="text-3xl"><a href="/">Temperature Analysis</a></h1>
+        <h1 class="text-3xl pl-4"><a href="/">Temperature Analysis</a></h1>
         @if(ViewBag.UserLogin == true){
-            <a href="/login/logout" class="px-2 py-1 outline outline-1 outline-offset-1 transition-all ease-in-out hover:outline hover:outline-offset-2 hover:outline-2 hover:outline hover:outline-white hover:bg-white hover:text-black rounded">Logout</a>
+            <a href="/login/logout" class="px-2 py-1 mr-4 outline outline-1 outline-offset-1 transition-all ease-in-out hover:outline hover:outline-offset-2 hover:outline-2 hover:outline hover:outline-white hover:bg-white hover:text-black rounded">Logout</a>
         }
         else
         {
-            <a href="/login" class="px-2 py-1 outline outline-1 outline-offset-1 transition-all ease-in-out hover:outline hover:outline-offset-2 hover:outline-2 hover:outline hover:outline-white hover:bg-white hover:text-black rounded">Login</a>  
+            <a href="/login" class="px-3 py-1 mr-4 outline outline-1 outline-offset-1 transition-all ease-in-out hover:outline hover:outline-offset-2 hover:outline-2 hover:outline hover:outline-white hover:bg-white hover:text-black rounded">Login</a>  
         }
     </header>
 
@@ -36,12 +36,18 @@
             
                 @if(ViewBag.UserLogin == true){
                 <ul>
-                    <li><a href="/temperature">&rarr; Gráfico de temperatura</a></li>
+                    <li><a href="/temperature">&rarr; Gráfico de Temperatura</a></li>
+                    <br>
                     @if (ViewBag.IsEmployee == true || ViewBag.IsAdmin == true)
                     {
-                        <li><a href="/admin">&rarr; Gerenciamento de Usuários</a></li>
-                        <li><a href="/device">&rarr; Gerenciamento de Dispositivos</a></li>
+                        <h2 class="font-bold mb-2">Gerenciamento</h2>
+                        <li><a href="/admin">&rarr; Usuários</a></li>
+                        <li><a href="/device">&rarr; Dispositivos</a></li>
+                        <br>
                     }
+                    <h2 class="font-bold mb-2">Apresentações</h2>
+                    <li><a href="/controle">&rarr; Controle e Automação</a></li>
+                    <li><a href="/embarcados">&rarr; Sistemas Embarcados</a></li>
                 </ul>
                 }
                 else
